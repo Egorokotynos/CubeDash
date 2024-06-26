@@ -8,6 +8,8 @@ public class CubeSkin : MonoBehaviour
     public Texture magmaTexture;
     public Texture goldTexture;
     public Texture spaceTexture;
+    public Texture skin1Texture; // Texture for skin1
+    public Texture skin2Texture; // Texture for skin2
 
     private Renderer cubeRenderer;
 
@@ -18,8 +20,8 @@ public class CubeSkin : MonoBehaviour
 
         // Apply the texture based on the saved states
         ApplyTexture();
-
     }
+
     void Update()
     {
         ApplyTexture();
@@ -31,6 +33,8 @@ public class CubeSkin : MonoBehaviour
         bool magmaison = PlayerPrefs.GetInt("magmaison", 0) == 1;
         bool goldison = PlayerPrefs.GetInt("goldison", 0) == 1;
         bool spaceison = PlayerPrefs.GetInt("spaceison", 0) == 1;
+        bool skin1ison = PlayerPrefs.GetInt("skin1ison", 0) == 1;
+        bool skin2ison = PlayerPrefs.GetInt("skin2ison", 0) == 1;
 
         if (diamondison)
         {
@@ -47,6 +51,14 @@ public class CubeSkin : MonoBehaviour
         else if (spaceison)
         {
             cubeRenderer.material.mainTexture = spaceTexture;
+        }
+        else if (skin1ison)
+        {
+            cubeRenderer.material.mainTexture = skin1Texture;
+        }
+        else if (skin2ison)
+        {
+            cubeRenderer.material.mainTexture = skin2Texture;
         }
     }
 }
