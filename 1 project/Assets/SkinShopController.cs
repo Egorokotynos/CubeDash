@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Purchasing;
+using UnityEngine.Events;
+using System;
 
 public class SkinShop : MonoBehaviour, IStoreListener
 {
@@ -17,12 +19,25 @@ public class SkinShop : MonoBehaviour, IStoreListener
     public Button spaceButton; // Reference to the button for the space skin
     public Button skin1Button; // Reference to the button for the skin1
     public Button skin2Button; // Reference to the button for the skin2
+    [Space]
+    [SerializeField] private Button _money200Button;
+    [SerializeField] private Button _money500Button;
+
 
     private IStoreController storeController;
     private IExtensionProvider extensionProvider;
 
-    private readonly string SKIN1_PRODUCT_ID = "skin1";
-    private readonly string SKIN2_PRODUCT_ID = "skin2";
+    private readonly string SKIN1_PRODUCT_ID = "cube.skin1";
+    private readonly string SKIN2_PRODUCT_ID = "cube.skin2";
+
+    private readonly string _MONEY_200_ID = "gold.cube.200";
+    private readonly string _MONEY_500_ID = "gold.cube.500";
+
+    private void Awake()
+    {
+        InitPurchases();
+
+    }
 
     void Start()
     {
@@ -39,8 +54,14 @@ public class SkinShop : MonoBehaviour, IStoreListener
         skin1Button.onClick.AddListener(BuySkin1);
         skin2Button.onClick.AddListener(BuySkin2);
 
+        _money200Button.onClick.AddListener(() => OnBuyDonateCurrencyGame(_MONEY_200_ID));
+        _money500Button.onClick.AddListener(() => OnBuyDonateCurrencyGame(_MONEY_500_ID));
+
+
         Debug.Log("SkinShop script started and buttons assigned.");
     }
+
+
 
     void UpdateCoinsText()
     {
@@ -110,6 +131,11 @@ public class SkinShop : MonoBehaviour, IStoreListener
         BuyProduct(SKIN2_PRODUCT_ID);
     }
 
+    private void OnBuyDonateCurrencyGame(string count)
+    {
+        BuyProduct(count);
+    }
+
     void BuyProduct(string productId)
     {
         Debug.Log($"BuyProduct called for {productId}.");
@@ -151,15 +177,26 @@ public class SkinShop : MonoBehaviour, IStoreListener
     {
         Debug.Log("UpdateButtonStates called.");
         // Update the text on each button based on whether the corresponding skin is bought or equipped
-        UpdateButtonText(diamondButton, "diamond", diamondPrice);
-        UpdateButtonText(magmaButton, "magma", magmaPrice);
-        UpdateButtonText(goldButton, "gold", goldPrice);
-        UpdateButtonText(spaceButton, "space", spacePrice);
-        UpdateButtonText(skin1Button, "skin1");
-        UpdateButtonText(skin2Button, "skin2");
+        UpdateButtonText(diamondButton, "diamond", diamondPrice.ToString());
+        UpdateButtonText(magmaButton, "magma", magmaPrice.ToString());
+        UpdateButtonText(goldButton, "gold", goldPrice.ToString());
+        UpdateButtonText(spaceButton, "space", spacePrice.ToString());
+
+        Product productSkin1 = storeController.products.WithID(SKIN1_PRODUCT_ID);
+        Product productSkin2 = storeController.products.WithID(SKIN2_PRODUCT_ID);
+
+        UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
+        UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
+
+        Product productMoney200 = storeController.products.WithID(_MONEY_200_ID);
+        Product productMoney500 = storeController.products.WithID(_MONEY_500_ID);
+
+        UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
+        UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
+
     }
 
-    void UpdateButtonText(Button button, string skinKey, int price = 0)
+    void UpdateButtonText(Button button, string skinKey, string price = "")
     {
         Text buttonText = button.GetComponentInChildren<Text>();
         if (PlayerPrefs.GetInt($"{skinKey}ison", 0) == 1)
@@ -172,7 +209,7 @@ public class SkinShop : MonoBehaviour, IStoreListener
         }
         else
         {
-            buttonText.text = price > 0 ? $"Buy ({price})" : "Buy";
+            buttonText.text = price.Length >= 1 ? $"Buy ({price})" : "Buy";
         }
     }
 
@@ -188,6 +225,9 @@ public class SkinShop : MonoBehaviour, IStoreListener
 
         storeBuilder.AddProduct(SKIN1_PRODUCT_ID, ProductType.NonConsumable);
         storeBuilder.AddProduct(SKIN2_PRODUCT_ID, ProductType.NonConsumable);
+
+        storeBuilder.AddProduct(_MONEY_200_ID, ProductType.Consumable);
+        storeBuilder.AddProduct(_MONEY_500_ID, ProductType.Consumable);
 
         UnityPurchasing.Initialize(this, storeBuilder);
     }
@@ -225,10 +265,24 @@ public class SkinShop : MonoBehaviour, IStoreListener
             EquipSkin("skin2");
         }
 
+        int coins = PlayerPrefs.GetInt("allscore", 0);
+
+        if (args.purchasedProduct.definition.id == _MONEY_200_ID)
+        {
+            coins += 200;
+            PlayerPrefs.SetInt("allscore", coins);
+        }
+        else if (args.purchasedProduct.definition.id == _MONEY_500_ID)
+        {
+            coins += 500;
+            PlayerPrefs.SetInt("allscore", coins);
+        }
+
+
         UpdateButtonStates();
         return PurchaseProcessingResult.Complete;
-    }
 
+    }
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
         Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
