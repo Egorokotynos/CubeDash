@@ -151,24 +151,28 @@ public class SkinShop : MonoBehaviour, IStoreListener
     {
         Debug.Log("UpdateButtonStates called.");
         // Update the text on each button based on whether the corresponding skin is bought or equipped
-        UpdateButtonText(diamondButton, "diamond");
-        UpdateButtonText(magmaButton, "magma");
-        UpdateButtonText(goldButton, "gold");
-        UpdateButtonText(spaceButton, "space");
+        UpdateButtonText(diamondButton, "diamond", diamondPrice);
+        UpdateButtonText(magmaButton, "magma", magmaPrice);
+        UpdateButtonText(goldButton, "gold", goldPrice);
+        UpdateButtonText(spaceButton, "space", spacePrice);
         UpdateButtonText(skin1Button, "skin1");
         UpdateButtonText(skin2Button, "skin2");
     }
 
-    void UpdateButtonText(Button button, string skinKey)
+    void UpdateButtonText(Button button, string skinKey, int price = 0)
     {
         Text buttonText = button.GetComponentInChildren<Text>();
         if (PlayerPrefs.GetInt($"{skinKey}ison", 0) == 1)
         {
             buttonText.text = "Take off";
         }
+        else if (PlayerPrefs.GetInt($"{skinKey}isbought", 0) == 1)
+        {
+            buttonText.text = "Take on";
+        }
         else
         {
-            buttonText.text = PlayerPrefs.GetInt($"{skinKey}isbought", 0) == 1 ? "Take on" : "Buy";
+            buttonText.text = price > 0 ? $"Buy ({price})" : "Buy";
         }
     }
 
