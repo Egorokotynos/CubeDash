@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Purchasing;
 using UnityEngine.Events;
 using System;
 
-public class SkinShop : MonoBehaviour, IStoreListener
+public class SkinShop : MonoBehaviour
 {
     public GameObject notEnoughMoneyPanel; // Reference to the panel informing the player about not enough money
     public Text coinsText; // Reference to the UI text displaying the number of coins
@@ -23,9 +22,6 @@ public class SkinShop : MonoBehaviour, IStoreListener
     [SerializeField] private Button _money200Button;
     [SerializeField] private Button _money500Button;
 
-
-    private IStoreController storeController;
-    private IExtensionProvider extensionProvider;
 
     private readonly string SKIN1_PRODUCT_ID = "cube.skin1";
     private readonly string SKIN2_PRODUCT_ID = "cube.skin2";
@@ -138,24 +134,24 @@ public class SkinShop : MonoBehaviour, IStoreListener
 
     void BuyProduct(string productId)
     {
-        Debug.Log($"BuyProduct called for {productId}.");
-        if (IsInitialized())
-        {
-            Product product = storeController.products.WithID(productId);
+        // Debug.Log($"BuyProduct called for {productId}.");
+        // if (IsInitialized())
+        // {
+        //     Product product = storeController.products.WithID(productId);
 
-            if (product != null && product.availableToPurchase)
-            {
-                storeController.InitiatePurchase(product);
-            }
-            else
-            {
-                Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
-            }
-        }
-        else
-        {
-            Debug.Log("BuyProductID FAIL. Not initialized.");
-        }
+        //     if (product != null && product.availableToPurchase)
+        //     {
+        //         storeController.InitiatePurchase(product);
+        //     }
+        //     else
+        //     {
+        //         Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.Log("BuyProductID FAIL. Not initialized.");
+        // }
     }
 
     void EquipSkin(string skinKey)
@@ -182,17 +178,17 @@ public class SkinShop : MonoBehaviour, IStoreListener
         UpdateButtonText(goldButton, "gold", goldPrice.ToString());
         UpdateButtonText(spaceButton, "space", spacePrice.ToString());
 
-        Product productSkin1 = storeController.products.WithID(SKIN1_PRODUCT_ID);
-        Product productSkin2 = storeController.products.WithID(SKIN2_PRODUCT_ID);
+        // Product productSkin1 = storeController.products.WithID(SKIN1_PRODUCT_ID);
+        // Product productSkin2 = storeController.products.WithID(SKIN2_PRODUCT_ID);
 
-        UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
-        UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
+        // UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
+        // UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
 
-        Product productMoney200 = storeController.products.WithID(_MONEY_200_ID);
-        Product productMoney500 = storeController.products.WithID(_MONEY_500_ID);
+        // Product productMoney200 = storeController.products.WithID(_MONEY_200_ID);
+        // Product productMoney500 = storeController.products.WithID(_MONEY_500_ID);
 
-        UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
-        UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
+        // UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
+        // UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
 
     }
 
@@ -216,75 +212,75 @@ public class SkinShop : MonoBehaviour, IStoreListener
     private void InitPurchases()
     {
         Debug.Log("InitPurchases called.");
-        if (IsInitialized())
-        {
-            return;
-        }
+        // if (IsInitialized())
+        // {
+        //     return;
+        // }
 
-        var storeBuilder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+        // var storeBuilder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
-        storeBuilder.AddProduct(SKIN1_PRODUCT_ID, ProductType.NonConsumable);
-        storeBuilder.AddProduct(SKIN2_PRODUCT_ID, ProductType.NonConsumable);
+        // storeBuilder.AddProduct(SKIN1_PRODUCT_ID, ProductType.NonConsumable);
+        // storeBuilder.AddProduct(SKIN2_PRODUCT_ID, ProductType.NonConsumable);
 
-        storeBuilder.AddProduct(_MONEY_200_ID, ProductType.Consumable);
-        storeBuilder.AddProduct(_MONEY_500_ID, ProductType.Consumable);
+        // storeBuilder.AddProduct(_MONEY_200_ID, ProductType.Consumable);
+        // storeBuilder.AddProduct(_MONEY_500_ID, ProductType.Consumable);
 
-        UnityPurchasing.Initialize(this, storeBuilder);
+        // UnityPurchasing.Initialize(this, storeBuilder);
     }
 
-    private bool IsInitialized() => storeController != null && extensionProvider != null;
+    // private bool IsInitialized() => storeController != null && extensionProvider != null;
 
-    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        storeController = controller;
-        extensionProvider = extensions;
-        Debug.Log("OnInitialized called.");
-    }
+    // public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
+    // {
+    //     storeController = controller;
+    //     extensionProvider = extensions;
+    //     Debug.Log("OnInitialized called.");
+    // }
 
-    public void OnInitializeFailed(InitializationFailureReason error)
-    {
-        Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
-    }
+    // public void OnInitializeFailed(InitializationFailureReason error)
+    // {
+    //     Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
+    // }
 
-    public void OnInitializeFailed(InitializationFailureReason error, string message)
-    {
-        Debug.Log($"OnInitializeFailed InitializationFailureReason: {error}, Message: {message}");
-    }
+    // public void OnInitializeFailed(InitializationFailureReason error, string message)
+    // {
+    //     Debug.Log($"OnInitializeFailed InitializationFailureReason: {error}, Message: {message}");
+    // }
 
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
-    {
-        Debug.Log($"ProcessPurchase called for {args.purchasedProduct.definition.id}.");
-        if (args.purchasedProduct.definition.id == SKIN1_PRODUCT_ID)
-        {
-            PlayerPrefs.SetInt("skin1isbought", 1);
-            EquipSkin("skin1");
-        }
-        else if (args.purchasedProduct.definition.id == SKIN2_PRODUCT_ID)
-        {
-            PlayerPrefs.SetInt("skin2isbought", 1);
-            EquipSkin("skin2");
-        }
+    // public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
+    // {
+    //     Debug.Log($"ProcessPurchase called for {args.purchasedProduct.definition.id}.");
+    //     if (args.purchasedProduct.definition.id == SKIN1_PRODUCT_ID)
+    //     {
+    //         PlayerPrefs.SetInt("skin1isbought", 1);
+    //         EquipSkin("skin1");
+    //     }
+    //     else if (args.purchasedProduct.definition.id == SKIN2_PRODUCT_ID)
+    //     {
+    //         PlayerPrefs.SetInt("skin2isbought", 1);
+    //         EquipSkin("skin2");
+    //     }
 
-        int coins = PlayerPrefs.GetInt("allscore", 0);
+    //     int coins = PlayerPrefs.GetInt("allscore", 0);
 
-        if (args.purchasedProduct.definition.id == _MONEY_200_ID)
-        {
-            coins += 200;
-            PlayerPrefs.SetInt("allscore", coins);
-        }
-        else if (args.purchasedProduct.definition.id == _MONEY_500_ID)
-        {
-            coins += 500;
-            PlayerPrefs.SetInt("allscore", coins);
-        }
+    //     if (args.purchasedProduct.definition.id == _MONEY_200_ID)
+    //     {
+    //         coins += 200;
+    //         PlayerPrefs.SetInt("allscore", coins);
+    //     }
+    //     else if (args.purchasedProduct.definition.id == _MONEY_500_ID)
+    //     {
+    //         coins += 500;
+    //         PlayerPrefs.SetInt("allscore", coins);
+    //     }
 
 
-        UpdateButtonStates();
-        return PurchaseProcessingResult.Complete;
+    //     UpdateButtonStates();
+    //     return PurchaseProcessingResult.Complete;
 
-    }
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
-    {
-        Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
-    }
+    // }
+    // public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
+    // {
+    //     Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
+    // }
 }
