@@ -1,3 +1,4 @@
+using System;
 using CubeDash.Assets.Scripts.IosMessagesSKD;
 using UnityEngine;
 
@@ -12,6 +13,20 @@ public class MoveCube : MonoBehaviour
     private Rigidbody rb;
     private float timeSinceLastJump;
 
+    private void OnEnable()
+    {
+
+        NotificationCustomCenter.Instance.AddObserver("ADLOVIN_SHOW_AD", ShowAd);
+    }
+
+    private void ShowAd()
+    {
+        Debug.Log("add Show");
+    }
+    private void OnDisable()
+    {
+        NotificationCustomCenter.Instance.RemoveObserver("ADLOVIN_SHOW_AD", ShowAd);
+    }
     void Start()
     {
         // Get the Rigidbody component attached to the cube
