@@ -30,8 +30,8 @@ public class ScoreManager : MonoBehaviour
     // Call this method to increment the score
     public void AddPoint()
     {
-        score += 100;
-        allscore += 100;
+        score += 1;
+        allscore += 1;
 
         // Save the updated allscore to PlayerPrefs
         PlayerPrefs.SetInt("allscore", allscore);
