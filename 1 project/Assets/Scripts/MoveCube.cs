@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MoveCube : MonoBehaviour
 {
@@ -7,6 +6,7 @@ public class MoveCube : MonoBehaviour
     public float speed = 1.0f; // Speed at which the object moves
     public float jumpForce = 1.0f; // The force applied when the cube jumps
     public float jumpCooldown = 1.0f; // Cooldown period between jumps
+    public GameObject objectToActivate; // The object to activate on collision
 
     private Rigidbody rb;
     private float timeSinceLastJump;
@@ -17,6 +17,12 @@ public class MoveCube : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         // Initialize the timeSinceLastJump
         timeSinceLastJump = jumpCooldown; // Start with the cube being able to jump immediately
+
+        // Ensure the object to activate is initially inactive
+        if (objectToActivate != null)
+        {
+            objectToActivate.SetActive(false);
+        }
     }
 
     void Update()
@@ -53,8 +59,11 @@ public class MoveCube : MonoBehaviour
         // Check if the collided object has the tag "Spike"
         if (collision.gameObject.tag == "Spike")
         {
-            // Load the scene named "Menu"
-            SceneManager.LoadScene("Menu");
+            // Activate the chosen object
+            if (objectToActivate != null)
+            {
+                objectToActivate.SetActive(true);
+            }
         }
     }
 }
