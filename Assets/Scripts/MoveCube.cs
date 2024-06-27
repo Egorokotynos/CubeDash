@@ -1,3 +1,4 @@
+using CubeDash.Assets.Scripts.IosMessagesSKD;
 using UnityEngine;
 
 public class MoveCube : MonoBehaviour
@@ -63,6 +64,8 @@ public class MoveCube : MonoBehaviour
             if (objectToActivate != null)
             {
                 objectToActivate.SetActive(true);
+
+                NotificationCustomCenter.Instance.PostNotification("ADLOVIN_SHOW_AD");
             }
         }
     }
