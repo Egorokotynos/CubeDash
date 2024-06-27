@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.Purchasing;
 using UnityEngine.Events;
 using System;
+using CubeDash.Assets.Skins;
 
-public class SkinShop : MonoBehaviour, IStoreListener
+public class SkinShop : MonoBehaviour
 {
     public GameObject notEnoughMoneyPanel; // Reference to the panel informing the player about not enough money
     public Text coinsText; // Reference to the UI text displaying the number of coins
@@ -22,28 +23,18 @@ public class SkinShop : MonoBehaviour, IStoreListener
     [Space]
     [SerializeField] private Button _money200Button;
     [SerializeField] private Button _money500Button;
+    private string _MONEY_200_ID => DonateSystemIAP.MONEY_200_ID;
+    private string _MONEY_500_ID => DonateSystemIAP.MONEY_500_ID;
+
+    private string SKIN1_PRODUCT_ID => DonateSystemIAP.SKIN1_PRODUCT_ID;
+    private string SKIN2_PRODUCT_ID => DonateSystemIAP.SKIN1_PRODUCT_ID;
 
 
-    private IStoreController storeController;
-    private IExtensionProvider extensionProvider;
-
-    private readonly string SKIN1_PRODUCT_ID = "cube.skin1";
-    private readonly string SKIN2_PRODUCT_ID = "cube.skin2";
-
-    private readonly string _MONEY_200_ID = "gold.cube.200";
-    private readonly string _MONEY_500_ID = "gold.cube.500";
-
-    private void Awake()
-    {
-        InitPurchases();
-
-    }
-
-    void Start()
+    private void Start()
     {
         UpdateButtonStates();
         UpdateCoinsText();
-        InitPurchases();
+
         notEnoughMoneyPanel.SetActive(false); // Ensure the panel is hidden at the start
 
         // Assign button click listeners
@@ -122,42 +113,48 @@ public class SkinShop : MonoBehaviour, IStoreListener
     public void BuySkin1()
     {
         Debug.Log("BuySkin1 called.");
-        BuyProduct(SKIN1_PRODUCT_ID);
+        DonateSystemIAP.SYSTEM.BuyProduct(SKIN1_PRODUCT_ID, ActionIfBought);
     }
 
     public void BuySkin2()
     {
         Debug.Log("BuySkin2 called.");
-        BuyProduct(SKIN2_PRODUCT_ID);
+        DonateSystemIAP.SYSTEM.BuyProduct(SKIN2_PRODUCT_ID, ActionIfBought);
     }
 
     private void OnBuyDonateCurrencyGame(string count)
     {
-        BuyProduct(count);
+        DonateSystemIAP.SYSTEM.BuyProduct(count, ActionIfBought);
     }
-
-    void BuyProduct(string productId)
+    private void ActionIfBought(string PRODUCT_ID)
     {
-        Debug.Log($"BuyProduct called for {productId}.");
-        if (IsInitialized())
-        {
-            Product product = storeController.products.WithID(productId);
 
-            if (product != null && product.availableToPurchase)
-            {
-                storeController.InitiatePurchase(product);
-            }
-            else
-            {
-                Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
-            }
-        }
-        else
+        if (PRODUCT_ID == SKIN1_PRODUCT_ID)
         {
-            Debug.Log("BuyProductID FAIL. Not initialized.");
+            PlayerPrefs.SetInt("skin1isbought", 1);
+            EquipSkin("skin1");
         }
+        else if (PRODUCT_ID == SKIN2_PRODUCT_ID)
+        {
+            PlayerPrefs.SetInt("skin2isbought", 1);
+            EquipSkin("skin2");
+        }
+
+        int coins = PlayerPrefs.GetInt("allscore", 0);
+
+        if (PRODUCT_ID == _MONEY_200_ID)
+        {
+            coins += 200;
+            PlayerPrefs.SetInt("allscore", coins);
+        }
+        else if (PRODUCT_ID == _MONEY_500_ID)
+        {
+            coins += 500;
+            PlayerPrefs.SetInt("allscore", coins);
+        }
+
+        UpdateButtonStates();
     }
-
     void EquipSkin(string skinKey)
     {
         Debug.Log($"EquipSkin called for {skinKey}.");
@@ -182,14 +179,14 @@ public class SkinShop : MonoBehaviour, IStoreListener
         UpdateButtonText(goldButton, "gold", goldPrice.ToString());
         UpdateButtonText(spaceButton, "space", spacePrice.ToString());
 
-        Product productSkin1 = storeController.products.WithID(SKIN1_PRODUCT_ID);
-        Product productSkin2 = storeController.products.WithID(SKIN2_PRODUCT_ID);
+        Product productSkin1 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN1_PRODUCT_ID);
+        Product productSkin2 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN2_PRODUCT_ID);
 
         UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
         UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
 
-        Product productMoney200 = storeController.products.WithID(_MONEY_200_ID);
-        Product productMoney500 = storeController.products.WithID(_MONEY_500_ID);
+        Product productMoney200 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_200_ID);
+        Product productMoney500 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_500_ID);
 
         UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
         UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
@@ -213,78 +210,8 @@ public class SkinShop : MonoBehaviour, IStoreListener
         }
     }
 
-    private void InitPurchases()
-    {
-        Debug.Log("InitPurchases called.");
-        if (IsInitialized())
-        {
-            return;
-        }
-
-        var storeBuilder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-
-        storeBuilder.AddProduct(SKIN1_PRODUCT_ID, ProductType.NonConsumable);
-        storeBuilder.AddProduct(SKIN2_PRODUCT_ID, ProductType.NonConsumable);
-
-        storeBuilder.AddProduct(_MONEY_200_ID, ProductType.Consumable);
-        storeBuilder.AddProduct(_MONEY_500_ID, ProductType.Consumable);
-
-        UnityPurchasing.Initialize(this, storeBuilder);
-    }
-
-    private bool IsInitialized() => storeController != null && extensionProvider != null;
-
-    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        storeController = controller;
-        extensionProvider = extensions;
-        Debug.Log("OnInitialized called.");
-    }
-
-    public void OnInitializeFailed(InitializationFailureReason error)
-    {
-        Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
-    }
-
-    public void OnInitializeFailed(InitializationFailureReason error, string message)
-    {
-        Debug.Log($"OnInitializeFailed InitializationFailureReason: {error}, Message: {message}");
-    }
-
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
-    {
-        Debug.Log($"ProcessPurchase called for {args.purchasedProduct.definition.id}.");
-        if (args.purchasedProduct.definition.id == SKIN1_PRODUCT_ID)
-        {
-            PlayerPrefs.SetInt("skin1isbought", 1);
-            EquipSkin("skin1");
-        }
-        else if (args.purchasedProduct.definition.id == SKIN2_PRODUCT_ID)
-        {
-            PlayerPrefs.SetInt("skin2isbought", 1);
-            EquipSkin("skin2");
-        }
-
-        int coins = PlayerPrefs.GetInt("allscore", 0);
-
-        if (args.purchasedProduct.definition.id == _MONEY_200_ID)
-        {
-            coins += 200;
-            PlayerPrefs.SetInt("allscore", coins);
-        }
-        else if (args.purchasedProduct.definition.id == _MONEY_500_ID)
-        {
-            coins += 500;
-            PlayerPrefs.SetInt("allscore", coins);
-        }
 
 
-        UpdateButtonStates();
-        return PurchaseProcessingResult.Complete;
 
-    }
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
-    {
-        Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
-    }
+
 }

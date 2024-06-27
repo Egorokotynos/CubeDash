@@ -1869,7 +1869,7 @@ GameObject:
   - component: {fileID: 819895349}
   - component: {fileID: 819895348}
   m_Layer: 5
-  m_Name: ImageFruit (1)
+  m_Name: BadGrpahicsImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1891,8 +1891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -89.41536, y: -103.072815}
-  m_SizeDelta: {x: 272.5831, y: 272.32}
+  m_AnchoredPosition: {x: -89.41536, y: -95.6248}
+  m_SizeDelta: {x: 272.5831, y: 147.4705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &819895348
 MonoBehaviour:
@@ -1914,9 +1914,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6497d3489b3776643ac9038ce322f545, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7125bc85cea8a4ee590617059f6da831, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3518,7 +3518,7 @@ GameObject:
   - component: {fileID: 1320953902}
   - component: {fileID: 1320953901}
   m_Layer: 5
-  m_Name: ImageFruit
+  m_Name: GoodGraphicsImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3540,8 +3540,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 88.40387, y: -103.83008}
-  m_SizeDelta: {x: 272.5831, y: 272.32}
+  m_AnchoredPosition: {x: 88.40387, y: -96.03491}
+  m_SizeDelta: {x: 272.5831, y: 147.4705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1320953901
 MonoBehaviour:
@@ -3565,7 +3565,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: c041aeb9a456abb4190b399434ff444c, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -5503,7 +5503,7 @@ GameObject:
   - component: {fileID: 2058877271}
   - component: {fileID: 2058877270}
   m_Layer: 5
-  m_Name: ImageFruit (2)
+  m_Name: NormalGraphiImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5525,8 +5525,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1742249, y: -104.5708}
-  m_SizeDelta: {x: 272.5831, y: 272.32}
+  m_AnchoredPosition: {x: -1.1742249, y: -96.436035}
+  m_SizeDelta: {x: 272.5831, y: 147.4705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2058877270
 MonoBehaviour:
@@ -5548,7 +5548,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 10d95c1f3e7f5894db02a786999256f1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c8e13934b3094575b49ee894ac7332a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5600,8 +5600,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 0.0000047684, y: 0}
+  m_SizeDelta: {x: 38.6254, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2062088622
 MonoBehaviour:

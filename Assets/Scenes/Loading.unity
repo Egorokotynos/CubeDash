@@ -331,6 +331,7 @@ MonoBehaviour:
   speed: 0.5
   jumpForce: 1
   jumpCooldown: 1
+  objectToActivate: {fileID: 0}
 --- !u!4 &409294887 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8444779773309486210, guid: 052191d9e759c1d47a291d89cb44ce16, type: 3}
@@ -352,6 +353,8 @@ MonoBehaviour:
   magmaTexture: {fileID: 2800000, guid: da0536de2bdd98a428c6897396ced35e, type: 3}
   goldTexture: {fileID: 2800000, guid: ac32fc402798a0e4eb89a0d21c4cfc34, type: 3}
   spaceTexture: {fileID: 2800000, guid: 11dc6b48375fb5a4a821ec99054f4790, type: 3}
+  skin1Texture: {fileID: 0}
+  skin2Texture: {fileID: 0}
 --- !u!1 &496052136
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,6 +816,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &753339719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 753339721}
+  - component: {fileID: 753339720}
+  m_Layer: 0
+  m_Name: DONATE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &753339720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753339719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8bcaffa1f334ee4adc52d186ba6b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &753339721
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753339719}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 240.52583, y: 1988.5287, z: 11.273681}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &754647043
 GameObject:
   m_ObjectHideFlags: 0
@@ -1802,3 +1849,4 @@ SceneRoots:
   - {fileID: 1772787058}
   - {fileID: 1050296501}
   - {fileID: 613564259}
+  - {fileID: 753339721}
