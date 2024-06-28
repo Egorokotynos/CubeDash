@@ -1,8 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Purchasing;
-using UnityEngine.Events;
-using System;
 using CubeDash.Assets.Skins;
 
 public class SkinShop : MonoBehaviour
@@ -179,17 +176,17 @@ public class SkinShop : MonoBehaviour
         UpdateButtonText(goldButton, "gold", goldPrice.ToString());
         UpdateButtonText(spaceButton, "space", spacePrice.ToString());
 
-        Product productSkin1 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN1_PRODUCT_ID);
-        Product productSkin2 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN2_PRODUCT_ID);
+       // Product productSkin1 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN1_PRODUCT_ID);
+        //Product productSkin2 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN2_PRODUCT_ID);
 
-        UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
-        UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
+        UpdateButtonText(skin1Button, "skin1", "productSkin1.metadata.localizedPriceString");
+        UpdateButtonText(skin2Button, "skin2", "productSkin2.metadata.localizedPriceString");
 
-        Product productMoney200 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_200_ID);
-        Product productMoney500 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_500_ID);
+        // Product productMoney200 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_200_ID);
+        // Product productMoney500 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_500_ID);
 
-        UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
-        UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
+        UpdateButtonText(_money200Button, "null", "productMoney200.metadata.localizedPriceString");
+        UpdateButtonText(_money500Button, "null", "productMoney500.metadata.localizedPriceString");
 
     }
 
