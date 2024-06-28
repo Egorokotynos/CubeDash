@@ -9,7 +9,8 @@ public class ObjectToggle : MonoBehaviour
     {
         // Assuming you have a button with an OnClick event that calls this method
         Button button = GetComponent<Button>();
-        button.onClick.AddListener(ToggleObject);
+        if (button)
+            button.onClick.AddListener(ToggleObject);
     }
 
     public void ToggleObject()

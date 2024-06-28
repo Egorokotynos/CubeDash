@@ -15,8 +15,8 @@ public class MoveCube : MonoBehaviour
 
     private void OnEnable()
     {
-
-        NotificationCustomCenter.Instance.AddObserver("ADLOVIN_SHOW_AD", ShowAd);
+        if (NotificationCustomCenter.Instance)
+            NotificationCustomCenter.Instance.AddObserver("ADLOVIN_SHOW_AD", ShowAd);
     }
 
     private void ShowAd()

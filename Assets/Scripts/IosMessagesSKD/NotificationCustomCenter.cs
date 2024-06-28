@@ -9,7 +9,7 @@ namespace CubeDash.Assets.Scripts.IosMessagesSKD
         private static NotificationCustomCenter instance;
         private Dictionary<string, Action> eventTable = new Dictionary<string, Action>();
 
-        public static NotificationCustomCenter Instance;
+        public static NotificationCustomCenter Instance => instance;
 
         private void Awake()
         {

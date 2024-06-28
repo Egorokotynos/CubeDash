@@ -12,7 +12,7 @@ namespace CubeDash.Assets.Skins
 
         private IStoreController storeController;
         private IExtensionProvider extensionProvider;
-
+        private Product _s_ProductNow;
         public static readonly string SKIN1_PRODUCT_ID = "cube.skin1";
         public static readonly string SKIN2_PRODUCT_ID = "cube.skin2";
 
@@ -100,10 +100,46 @@ namespace CubeDash.Assets.Skins
         {
             Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
         }
-
-        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent)
+        public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
         {
-            throw new NotImplementedException();
+            _s_ProductNow = args.purchasedProduct;
+
+            // Example condition to check if the purchase is complete
+            bool isPurchaseComplete = VerifyPurchase(args.purchasedProduct);
+
+            if (isPurchaseComplete)
+            {
+                Debug.Log($"ProcessPurchase: Complete. Product: {args.purchasedProduct.definition.id} - {_s_ProductNow.transactionID}");
+                // Grant the item to the user here
+                GrantPurchasedItem(args.purchasedProduct);
+                return PurchaseProcessingResult.Complete;
+            }
+            else
+            {
+                Debug.Log($"ProcessPurchase: Pending. Product: {args.purchasedProduct.definition.id} - {_s_ProductNow.transactionID}");
+                // Handle the pending purchase here if needed
+                HandlePendingPurchase(args.purchasedProduct);
+                return PurchaseProcessingResult.Pending;
+            }
+        }
+
+        private bool VerifyPurchase(Product product)
+        {
+            // Add your verification logic here
+            // This could be a server-side verification or any other logic you need
+            return true; // Assume purchase is verified for this example
+        }
+
+        private void GrantPurchasedItem(Product product)
+        {
+            // Add logic to grant the purchased item to the user
+            // For example, add coins, unlock a feature, etc.
+        }
+
+        private void HandlePendingPurchase(Product product)
+        {
+            // Add logic to handle a pending purchase if needed
+            // This could be saving the pending state, notifying the user, etc.
         }
 
         public Product GetProductByUID(string nameIdProd)

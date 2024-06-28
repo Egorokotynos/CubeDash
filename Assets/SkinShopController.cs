@@ -27,7 +27,7 @@ public class SkinShop : MonoBehaviour
     private string _MONEY_500_ID => DonateSystemIAP.MONEY_500_ID;
 
     private string SKIN1_PRODUCT_ID => DonateSystemIAP.SKIN1_PRODUCT_ID;
-    private string SKIN2_PRODUCT_ID => DonateSystemIAP.SKIN1_PRODUCT_ID;
+    private string SKIN2_PRODUCT_ID => DonateSystemIAP.SKIN2_PRODUCT_ID;
 
 
     private void Start()
@@ -170,7 +170,7 @@ public class SkinShop : MonoBehaviour
         PlayerPrefs.SetInt($"{skinKey}ison", 1);
     }
 
-    void UpdateButtonStates()
+    private void UpdateButtonStates()
     {
         Debug.Log("UpdateButtonStates called.");
         // Update the text on each button based on whether the corresponding skin is bought or equipped
@@ -179,21 +179,66 @@ public class SkinShop : MonoBehaviour
         UpdateButtonText(goldButton, "gold", goldPrice.ToString());
         UpdateButtonText(spaceButton, "space", spacePrice.ToString());
 
-        Product productSkin1 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN1_PRODUCT_ID);
-        Product productSkin2 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN2_PRODUCT_ID);
+        UpdateButtonText(skin1Button, "skin1", "");
+        UpdateButtonText(skin2Button, "skin2", "");
 
-        UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
-        UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
 
-        Product productMoney200 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_200_ID);
-        Product productMoney500 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_500_ID);
 
-        UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
-        UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
+        UpdateButtonText(_money200Button, "null", "");
+        UpdateButtonText(_money500Button, "null", "");
+
+        try
+        {
+            Product productSkin1 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN1_PRODUCT_ID);
+            Product productSkin2 = DonateSystemIAP.SYSTEM.GetProductByUID(SKIN2_PRODUCT_ID);
+
+            if (productSkin1 != null)
+            {
+                UpdateButtonText(skin1Button, "skin1", productSkin1.metadata.localizedPriceString);
+            }
+            else
+            {
+                Debug.LogError($"Product with ID {SKIN1_PRODUCT_ID} not found.");
+            }
+
+            if (productSkin2 != null)
+            {
+                UpdateButtonText(skin2Button, "skin2", productSkin2.metadata.localizedPriceString);
+            }
+            else
+            {
+                Debug.LogError($"Product with ID {SKIN2_PRODUCT_ID} not found.");
+            }
+
+            Product productMoney200 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_200_ID);
+            Product productMoney500 = DonateSystemIAP.SYSTEM.GetProductByUID(_MONEY_500_ID);
+
+            if (productMoney200 != null)
+            {
+                UpdateButtonText(_money200Button, "null", productMoney200.metadata.localizedPriceString);
+            }
+            else
+            {
+                Debug.LogError($"Product with ID {_MONEY_200_ID} not found.");
+            }
+
+            if (productMoney500 != null)
+            {
+                UpdateButtonText(_money500Button, "null", productMoney500.metadata.localizedPriceString);
+            }
+            else
+            {
+                Debug.LogError($"Product with ID {_MONEY_500_ID} not found.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error updating button states: {ex.Message}");
+        }
 
     }
 
-    void UpdateButtonText(Button button, string skinKey, string price = "")
+    private void UpdateButtonText(Button button, string skinKey, string price = "")
     {
         Text buttonText = button.GetComponentInChildren<Text>();
         if (PlayerPrefs.GetInt($"{skinKey}ison", 0) == 1)
