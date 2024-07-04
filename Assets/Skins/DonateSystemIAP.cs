@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -9,10 +10,15 @@ namespace CubeDash.Assets.Skins
         public static DonateSystemIAP SYSTEM;
 
 
+        public static event Action<string> S_BuyActionPurchaseProduct;
+
+
 
         private IStoreController storeController;
         private IExtensionProvider extensionProvider;
         private Product _s_ProductNow;
+
+
         public static readonly string SKIN1_PRODUCT_ID = "cube.skin1";
         public static readonly string SKIN2_PRODUCT_ID = "cube.skin2";
 
@@ -53,7 +59,7 @@ namespace CubeDash.Assets.Skins
         }
 
 
-        public void BuyProduct(string productId, Action<string> OnBuyAfterTrue)
+        public void BuyProduct(string productId)
         {
             Debug.Log($"BuyProduct called for {productId}.");
             if (IsInitialized())
@@ -64,7 +70,6 @@ namespace CubeDash.Assets.Skins
                 {
                     Debug.Log(string.Format("BUY PRODUCT RN:" + product.definition.id.ToString()));
                     storeController.InitiatePurchase(product);
-                    OnBuyAfterTrue?.Invoke(productId);
                 }
                 else
                 {
@@ -132,19 +137,47 @@ namespace CubeDash.Assets.Skins
 
         private void GrantPurchasedItem(Product product)
         {
-            // Add logic to grant the purchased item to the user
-            // For example, add coins, unlock a feature, etc.
+            S_BuyActionPurchaseProduct?.Invoke(product.definition.id);
+            Debug.Log($"GrantPurchasedItem: {product.definition.id}");
+            //_onBuyActionPurchaseProduct = null;
         }
 
         private void HandlePendingPurchase(Product product)
         {
-            // Add logic to handle a pending purchase if needed
-            // This could be saving the pending state, notifying the user, etc.
+            //_onBuyActionPurchaseProduct = null;
         }
 
         public Product GetProductByUID(string nameIdProd)
         {
             return storeController.products.WithID(nameIdProd);
+        }
+        public void OnRestorePurchases()
+        {
+            extensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions(result =>
+            {
+
+                if (result)
+                {
+                    Debug.Log("Restore purchases succeeded.");
+                    Dictionary<string, object> parameters = new Dictionary<string, object>()
+                    {
+                    { "restore_success", true },
+                    };
+                    //AnalyticsService.Instance.CustomData("myRestore", parameters);
+                }
+                else
+                {
+                    Debug.Log("Restore purchases failed.");
+                    Dictionary<string, object> parameters = new Dictionary<string, object>()
+                    {
+                    { "restore_success", false },
+                    };
+                    // AnalyticsService.Instance.CustomData("myRestore", parameters);
+                }
+
+                // AnalyticsService.Instance.Flush();
+            });
+
         }
     }
 }

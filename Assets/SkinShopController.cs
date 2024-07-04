@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Purchasing;
-using UnityEngine.Events;
 using System;
 using CubeDash.Assets.Skins;
 
@@ -23,6 +22,11 @@ public class SkinShop : MonoBehaviour
     [Space]
     [SerializeField] private Button _money200Button;
     [SerializeField] private Button _money500Button;
+    [Space]
+    [SerializeField] private Button _rstorePurchases;
+
+
+
     private string _MONEY_200_ID => DonateSystemIAP.MONEY_200_ID;
     private string _MONEY_500_ID => DonateSystemIAP.MONEY_500_ID;
 
@@ -30,14 +34,8 @@ public class SkinShop : MonoBehaviour
     private string SKIN2_PRODUCT_ID => DonateSystemIAP.SKIN2_PRODUCT_ID;
 
 
-    private void Start()
+    private void OnEnable()
     {
-        UpdateButtonStates();
-        UpdateCoinsText();
-
-        notEnoughMoneyPanel.SetActive(false); // Ensure the panel is hidden at the start
-
-        // Assign button click listeners
         diamondButton.onClick.AddListener(BuyDiamondSkin);
         magmaButton.onClick.AddListener(BuyMagmaSkin);
         goldButton.onClick.AddListener(BuyGoldSkin);
@@ -48,8 +46,23 @@ public class SkinShop : MonoBehaviour
         _money200Button.onClick.AddListener(() => OnBuyDonateCurrencyGame(_MONEY_200_ID));
         _money500Button.onClick.AddListener(() => OnBuyDonateCurrencyGame(_MONEY_500_ID));
 
-
+        _rstorePurchases.onClick.AddListener(() => OnREstorePurchases());
         Debug.Log("SkinShop script started and buttons assigned.");
+
+        DonateSystemIAP.S_BuyActionPurchaseProduct += ActionIfBought;
+    }
+
+    private void OnREstorePurchases()
+    {
+        DonateSystemIAP.SYSTEM.OnRestorePurchases();
+    }
+
+    private void Start()
+    {
+        UpdateButtonStates();
+        UpdateCoinsText();
+
+        notEnoughMoneyPanel.SetActive(false); // Ensure the panel is hidden at the start
     }
 
 
@@ -113,18 +126,18 @@ public class SkinShop : MonoBehaviour
     public void BuySkin1()
     {
         Debug.Log("BuySkin1 called.");
-        DonateSystemIAP.SYSTEM.BuyProduct(SKIN1_PRODUCT_ID, ActionIfBought);
+        DonateSystemIAP.SYSTEM.BuyProduct(SKIN1_PRODUCT_ID);
     }
 
     public void BuySkin2()
     {
         Debug.Log("BuySkin2 called.");
-        DonateSystemIAP.SYSTEM.BuyProduct(SKIN2_PRODUCT_ID, ActionIfBought);
+        DonateSystemIAP.SYSTEM.BuyProduct(SKIN2_PRODUCT_ID);
     }
 
     private void OnBuyDonateCurrencyGame(string count)
     {
-        DonateSystemIAP.SYSTEM.BuyProduct(count, ActionIfBought);
+        DonateSystemIAP.SYSTEM.BuyProduct(count);
     }
     private void ActionIfBought(string PRODUCT_ID)
     {
@@ -254,9 +267,23 @@ public class SkinShop : MonoBehaviour
             buttonText.text = price.Length >= 1 ? $"Buy ({price})" : "Buy";
         }
     }
+    private void OnDisable()
+    {
+        diamondButton.onClick.RemoveAllListeners();
+        magmaButton.onClick.RemoveAllListeners();
+        goldButton.onClick.RemoveAllListeners();
+        spaceButton.onClick.RemoveAllListeners();
+        skin1Button.onClick.RemoveAllListeners();
+        skin2Button.onClick.RemoveAllListeners();
 
+        _money200Button.onClick.RemoveAllListeners();
+        _money500Button.onClick.RemoveAllListeners();
 
+        _rstorePurchases.onClick.RemoveAllListeners();
 
+        Debug.Log("SkinShop script started and buttons assigned.");
 
+        DonateSystemIAP.S_BuyActionPurchaseProduct -= ActionIfBought;
 
+    }
 }
